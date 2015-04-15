@@ -1,12 +1,13 @@
 #include <stdio.h>
-#include <stalub.h>
+#include <stdlib.h>
 #include <time.h>
 
 int main()
 {
-	int i, N, *v;
+	int i, j, N, *v, temp;
+	time_t T = 1 ;
 	//Create Random Integers
-	srand(time(&t));
+	srand(time(&T));
 	N = 10;
 	v = (int*) malloc (N* sizeof(int)); 
 	for(i=0;i<N;++i)
@@ -14,7 +15,7 @@ int main()
 		v[i] = rand()%100;
 		printf("%d,",v[i]);
 	}
-	printf("\n")
+	printf("\n");
 	//Bubble Sort
 	//Comapre v[i] and v[j]
 	//if v[i]>v[j]
@@ -24,12 +25,16 @@ int main()
 	for(i=0;i<N-1;++i)//由左至右 注意N-1 
 	{
 		if(v[i]>v[i+1])//compare (v[0],v[1]),(v[1],v[2]),....(v[8],v[9])
-		{
+		{				  //較大者往右移 
 			temp = v[i]; //開一個記憶體 把v[i]放進去 
 			v[i] = v[i+1];
 			v[i+1] = temp;
 		}
 	} 
+	for(i=0;i<N-2;++i)
+	{
+		printf("%d,",v[i]);
+	}
 	return 0;
 }
 
