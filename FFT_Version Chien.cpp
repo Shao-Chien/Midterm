@@ -52,11 +52,7 @@ int main()
 			system("pause");
 			Print_Complex_Vector(y_r, y_i, N);
 		}
-		else 
-		{
-			printf("OH!have some error!");
-			return 0;
-		}
+		
 		
 		free(x_r);
 		free(x_i);
@@ -135,7 +131,7 @@ int FFT_5(double *x_r, double *x_i, double *y_r, double *y_i, int N)
 		y_i[0] = x_i[0];
 		return 0; 
 	}
-	int k, n;
+	int k, n, j, m;
 	double *u_r, *u_i, *v_r, *v_i, w_r, w_i,wr,wi;
 	u_r = (double *) malloc(N*sizeof(double));
 	u_i = (double *) malloc(N*sizeof(double));
@@ -177,112 +173,26 @@ int FFT_5(double *x_r, double *x_i, double *y_r, double *y_i, int N)
 		FFT_2(u_r+4*N/5, u_i+4*N/5, v_r+4*N/5, v_i+4*N/5, N/5);
 	}
 	
-	double tempc,temps;
+	double tempc,temps, temp1,temp2;
 	for(k=0;k<N/5;++k)
 	{
-		w_r = cos(-k*2*M_PI/N);
-		w_i = sin(-k*2*M_PI/N);
-		tempc=w_r;
-		temps=w_i;
-		y_r[k] = v_r[k] + w_r*v_r[k+N/5] - w_i*v_i[k+N/5];
-		y_i[k] = v_i[k] + w_r*v_i[k+N/5] + w_i*v_r[k+N/5];
-		
-		w_r=w_r*tempc - w_i*temps;
-		w_i=w_i*tempc + w_r*tempc;
-		y_r[k] += w_r*v_r[k+2*N/5] - w_i*v_i[k+2*N/5]; 
-		y_i[k] += w_r*v_i[k+2*N/5] + w_i*v_r[k+2*N/5];
-		
-		w_r=w_r*tempc - w_i*temps;
-		w_i=w_i*tempc + w_r*tempc;
-		printf("%d\n",w_r-cos(-k*6*M_PI/N));
-		y_r[k] += w_r*v_r[k+3*N/5] - w_i*v_i[k+3*N/5];
-		y_i[k] += w_r*v_i[k+3*N/5] + w_i*v_r[k+3*N/5];
-		w_r = w_r*tempc - w_i*temps;
-		w_i = w_i*tempc + w_r*temps;
-		y_r[k] += w_r*v_r[k+4*N/5] - w_i*v_i[k+4*N/5];
-		y_i[k] += w_r*v_i[k+4*N/5] + w_i*v_r[k+4*N/5];
-		
-		//part1
-		
-		w_r = cos(-(k+N/5)*2*M_PI/N);
-		w_i = sin(-(k+N/5)*2*M_PI/N);
-		tempc = w_r;
-		temps = w_i;
-		y_r[k+N/5] = v_r[k] + w_r*v_r[k+N/5] - w_i*v_i[k+N/5];
-		y_i[k+N/5] = v_i[k] + w_r*v_i[k+N/5] + w_i*v_r[k+N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+N/5] += w_r*v_r[k+2*N/5] - w_i*v_i[k+2*N/5]; 
-		y_i[k+N/5] += w_r*v_i[k+2*N/5] + w_i*v_r[k+2*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+N/5] += w_r*v_r[k+3*N/5] - w_i*v_i[k+3*N/5];
-		y_i[k+N/5] += w_r*v_i[k+3*N/5] + w_i*v_r[k+3*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+N/5] += w_r*v_r[k+4*N/5] - w_i*v_i[k+4*N/5];
-		y_i[k+N/5] += w_r*v_i[k+4*N/5] + w_i*v_r[k+4*N/5];
-		//part2
-		
-		w_r = cos(-(k+2*N/5)*2*M_PI/N);
-		w_i = sin(-(k+2*N/5)*2*M_PI/N);
-		tempc = w_r;
-		temps = w_i; 
-		y_r[k+2*N/5] = v_r[k] + w_r*v_r[k+N/5] - w_i*v_i[k+N/5];
-		y_i[k+2*N/5] = v_i[k] + w_r*v_i[k+N/5] + w_i*v_r[k+N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+2*N/5] += w_r*v_r[k+2*N/5] - w_i*v_i[k+2*N/5]; 
-		y_i[k+2*N/5] += w_r*v_i[k+2*N/5] + w_i*v_r[k+2*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+2*N/5] += w_r*v_r[k+3*N/5] - w_i*v_i[k+3*N/5];
-		y_i[k+2*N/5] += w_r*v_i[k+3*N/5] + w_i*v_r[k+3*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+2*N/5] += w_r*v_r[k+4*N/5] - w_i*v_i[k+4*N/5];
-		y_i[k+2*N/5] += w_r*v_i[k+4*N/5] + w_i*v_r[k+4*N/5];
-		//part3
-		
-		w_r = cos(-(k+3*N/5)*2*M_PI/N);
-		w_i = sin(-(k+3*N/5)*2*M_PI/N);
-		tempc = w_r;
-		temps = w_i;
-		y_r[k+3*N/5] = v_r[k] + w_r*v_r[k+N/5] - w_i*v_i[k+N/5];
-		y_i[k+3*N/5] = v_i[k] + w_r*v_i[k+N/5] + w_i*v_r[k+N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+3*N/5] += w_r*v_r[k+2*N/5] - w_i*v_i[k+2*N/5]; 
-		y_i[k+3*N/5] += w_r*v_i[k+2*N/5] + w_i*v_r[k+2*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+3*N/5] += w_r*v_r[k+3*N/5] - w_i*v_i[k+3*N/5];
-		y_i[k+3*N/5] += w_r*v_i[k+3*N/5] + w_i*v_r[k+3*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+3*N/5] += w_r*v_r[k+4*N/5] - w_i*v_i[k+4*N/5];
-		y_i[k+3*N/5] += w_r*v_i[k+4*N/5] + w_i*v_r[k+4*N/5];
-		//part4
-		
-		w_r = cos(-(k+4*N/5)*2*M_PI/N);
-		w_i = sin(-(k+4*N/5)*2*M_PI/N);
-		tempc = w_r;
-		temps = w_i;
-		y_r[k+4*N/5] = v_r[k] + w_r*v_r[k+N/5] - w_i*v_i[k+N/5];
-		y_i[k+4*N/5] = v_i[k] + w_r*v_i[k+N/5] + w_i*v_r[k+N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+4*N/5] += w_r*v_r[k+2*N/5] - w_i*v_i[k+2*N/5]; 
-		y_i[k+4*N/5] += w_r*v_i[k+2*N/5] + w_i*v_r[k+2*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+4*N/5] += w_r*v_r[k+3*N/5] - w_i*v_i[k+3*N/5];
-		y_i[k+4*N/5] += w_r*v_i[k+3*N/5] + w_i*v_r[k+3*N/5];
-		w_r=w_r*tempc-w_i*temps;
-		w_i=w_i*tempc+w_r*tempc;
-		y_r[k+4*N/5] += w_r*v_r[k+4*N/5] - w_i*v_i[k+4*N/5];
-		y_i[k+4*N/5] += w_r*v_i[k+4*N/5] + w_i*v_r[k+4*N/5];
-		//part 5
+		for(m=0;m<5;++m)
+		{
+			int p = m*N/5;
+			tempc = cos(-(k+p)*2*M_PI/N);
+			temps = sin(-(k+p)*2*M_PI/N);
+			temp1 = 1;
+			temp2 = 0;
+			for(j=1;j<5;++j)
+			{
+				w_r = temp1*tempc - temp2*temps;
+				w_i = temp1*temps + temp2*tempc;
+				y_r[k+p] +=  w_r*v_r[k+j*N/5] - w_i*v_i[k+j*N/5]; 
+				y_i[k+p] +=  w_r*v_i[k+j*N/5] + w_i*v_r[k+j*N/5];
+				temp1 = w_r;
+				temp2 = w_i;
+			}
+		}
 	}
 	
 	free(u_r);
